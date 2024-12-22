@@ -87,6 +87,27 @@ async function createMovie(newMovie){
          res.status(500).json({error:"Failed to add movie"})
      }
  })
+ async function deleteMovie(movieId){
+    try{
+const deletedMovie=await Movie.findByIdAndDelete(movieId);
+console.log(deletedMovie)
+return deletedMovie
+    }catch(error){
+throw error
+    }
+}
+app.delete("/movies/:movieId",async(req,res)=>{
+    try {
+        const deletedMovie=await deleteMovie(req.params.movieId) 
+        if(deletedMovie)
+      {
+       res.status(200).json({message:"Movie Deleted successfully."})}else{
+        res.status(404).json({error:"Data Not Found"})
+       }
+    } catch (error) {
+      res.status(500).json({error:"Failed to delete movie"})  
+    }
+})
 app.listen(PORT,()=>{
     console.log("Server is running on PORT",PORT)
 })
