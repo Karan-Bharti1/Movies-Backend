@@ -70,6 +70,23 @@ app.get("/movies/genres/:genreName",async(req,res)=>{
             res.status(404).json({error:"No movies Found"})
     }
 })
+async function createMovie(newMovie){
+    try {
+     const movie=new Movie(newMovie)
+     const saveMovie=await movie.save()
+ return saveMovie
+    } catch (error) {
+     throw error
+    }
+ }
+ app.post("/movies",async(req,res)=>{
+     try {
+         const savedMovie=await createMovie(req.body)
+         res.status(201).json({message:"Movie added successfully",savedMovie})
+     } catch (error) {
+         res.status(500).json({error:"Failed to add movie"})
+     }
+ })
 app.listen(PORT,()=>{
     console.log("Server is running on PORT",PORT)
 })
