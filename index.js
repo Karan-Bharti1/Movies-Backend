@@ -108,6 +108,26 @@ app.delete("/movies/:movieId",async(req,res)=>{
       res.status(500).json({error:"Failed to delete movie"})  
     }
 })
+async function updateMovie(movieId,dataToBeUpdated){
+    try {
+       const updatedMovie=await Movie.findByIdAndUpdate(movieId,dataToBeUpdated,{new:true,}) 
+     return updatedMovie  
+    } catch (error) {
+       throw error 
+    }
+}
+app.post("/movies/:movieId",async(req,res)=>{
+    try {
+       const updatedMovie=await updateMovie(req.params.movieId,req.body) 
+       if(updatedMovie){
+        res.status(200).json({message:"Movie Updated Successfuly"})
+       }else{
+        res.status(404).json({error:"Movie Not Found"})
+       }
+    } catch (error) {
+        res.status(500).json({error:"Failed to update movie"})
+    }
+})
 app.listen(PORT,()=>{
     console.log("Server is running on PORT",PORT)
 })
